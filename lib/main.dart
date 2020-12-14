@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // import 'package:xml/xml.dart';
-import 'package:english_words/english_words.dart';
-import 'package:flutter/services.dart';
 // import 'package:flutter/services.dart' show rootBundle;
 
 void main() {
@@ -46,57 +44,115 @@ class HomePage extends StatefulWidget {
   }
 }
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController; //需要定义一个Controller
+  List tabs = ["关注", "推荐", "热榜"];
+
+  @override
+  void initState() {
+    super.initState();
+    // 创建Controller
+    _tabController = TabController(length: tabs.length, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        actions: <Widget>[
-          SizedBox(
-            width: 410,
-            height: 20,
-            child: TextField(
-              decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  labelText: "Please input something...",
-                  prefixIcon: Icon(Icons.search)),
-            ),
-          )
-        ],
+        title: Text("Focus on"),
+        actions: <Widget>[Icon(Icons.search)],
+        bottom: TabBar(
+            controller: _tabController,
+            tabs: tabs.map((e) => Tab(text: e)).toList()),
       ),
-      body: Column(
+      drawer: MyDrawer(),
+      body: TabBarView(
+        controller: _tabController,
         children: [
-          // Image.asset('assets/Tunnel.jpg'),
-          FutureBuilder(
-              future: DefaultAssetBundle.of(context)
-                  .loadString("assets/package.json"),
-              builder: (builder, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasError) {
-                    return Text("Error: ${snapshot.error}");
-                  } else {
-                    var content = json.decode(snapshot.data);
-                    return ItemList(content: content);
-
-                    // return ListView.builder(
-                    //     itemBuilder: (context, index) {
-                    //       return Card(
-                    //         child: Center(
-                    //           child: Text("title is ${content[index]["name"]}"),
-                    //         ),
-                    //       );
-                    //     },
-                    //     itemCount: content == null ? 0 : content.length);
-                  }
-                } else {
-                  return CircularProgressIndicator();
-                }
-              }),
+          Column(
+            children: [
+              // Image.asset('assets/Tunnel.jpg'),
+              FutureBuilder(
+                  future: DefaultAssetBundle.of(context)
+                      .loadString("assets/package.json"),
+                  builder: (builder, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        return Text("Error: ${snapshot.error}");
+                      } else {
+                        var content = json.decode(snapshot.data);
+                        return ItemList(content: content);
+                      }
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  }),
+            ],
+          ),
+          Container(
+              alignment: Alignment.center,
+              child: Text(tabs[1], textScaleFactor: 5)),
+          Container(
+              alignment: Alignment.center,
+              child: Text(tabs[2], textScaleFactor: 5)),
         ],
+        // tabs.map((e) { //创建3个Tab页
+        //   return Container(
+        //     alignment: Alignment.center,
+        //     child: Text(e, textScaleFactor: 5),
+        //   );
+        // }).toList(),
       ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Icon(Icons.album),
+              onPressed: () {},
+            ),
+            SizedBox(),
+            IconButton(
+              icon: Icon(Icons.favorite),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Icon(Icons.person),
+              onPressed: () {},
+            )
+          ],
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        ),
+        color: Colors.white,
+        shape: CircularNotchedRectangle(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+}
+
+class MyDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+        child: MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/head.jpg"), fit: BoxFit.contain)),
+      ),
+    ));
   }
 }
 
