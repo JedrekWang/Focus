@@ -144,15 +144,66 @@ class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-        child: MediaQuery.removePadding(
-      context: context,
-      removeTop: true,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/head.jpg"), fit: BoxFit.contain)),
+      child: MediaQuery.removePadding(
+        context: context,
+        removeTop: true,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.red),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 25,),
+              Row(
+                children: [
+                  Avatar(),
+                  SizedBox(
+                    width: 1,
+                    height: 150,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(color: Colors.grey),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text(
+                    "Jedrek Wang",
+                    style: TextStyle(fontWeight: FontWeight.w800),
+                  )
+                ],
+              ),
+              Divider(
+                height: 5,
+                color: Colors.lightBlue,
+              )
+            ],
+          ),
+        ),
       ),
-    ));
+    );
+  }
+}
+
+class Avatar extends StatelessWidget {
+  const Avatar({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipOval(
+      child: Container(
+          // alignment: Alignment.topLeft,
+          width: 150,
+          height: 150,
+          child: Image.asset(
+            "assets/head.jpg",
+            alignment: Alignment.centerLeft,
+            fit: BoxFit.cover,
+          )),
+    );
   }
 }
 
