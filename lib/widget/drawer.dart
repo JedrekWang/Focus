@@ -4,13 +4,22 @@ import 'package:flutter/material.dart';
 class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    List configs = [
+      {"text": "首页", "label": Icons.home},
+      {"text": "历史记录", "label": Icons.history},
+      {"text": "下载管理", "label": Icons.arrow_circle_down},
+      {"text": "我的收藏", "label": Icons.star_border},
+      {"text": "稍后再看", "label": Icons.watch_later_outlined},
+      {"text": "设置", "label": Icons.settings},
+    ];
+
     return Drawer(
       child: MediaQuery.removePadding(
         context: context,
         removeTop: true,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.red),
+            // border: Border.all(color: Colors.red),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -19,6 +28,7 @@ class MyDrawer extends StatelessWidget {
               Row(
                 children: [
                   Avatar(),
+                  SizedBox(width: 20),
                   Text(
                     "Jedrek Wang",
                     style: TextStyle(fontWeight: FontWeight.w800),
@@ -27,7 +37,7 @@ class MyDrawer extends StatelessWidget {
               ),
               Divider(
                 height: 5,
-                color: Colors.lightBlue,
+                color: Colors.grey,
               ),
               Column(
                 children: [
@@ -35,30 +45,54 @@ class MyDrawer extends StatelessWidget {
                     direction: Axis.horizontal,
                     children: [
                       Expanded(
-                        child: Container(
-                          color: Colors.yellowAccent,
-                          padding: EdgeInsets.all(10),
-                          child: Text("动态"),
+                          child: FlatButton(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        onPressed: () {},
+                        child: Column(
+                          children: [Text("0"), Text("动态")],
                         ),
-                      ),
+                      )),
                       Expanded(
-                        child: Container(
-                          color: Colors.redAccent,
-                          padding: EdgeInsets.all(10),
-                          child: Text("关注", textAlign: TextAlign.right,),
+                          child: FlatButton(
+                        onPressed: () {},
+                        child: Column(
+                          children: [Text("0"), Text("关注")],
                         ),
-                      ),
+                      )),
                       Expanded(
-                        child: Container(
-                          color: Colors.blueAccent,
-                          padding: EdgeInsets.all(10),
-                          child: Text("粉丝", textAlign: TextAlign.right,),
+                          child: FlatButton(
+                        onPressed: () {},
+                        child: Column(
+                          children: [Text("0"), Text("粉丝")],
                         ),
-                      )
+                      ))
                     ],
                   )
                 ],
-              )
+              ),
+              Divider(
+                height: 5,
+                color: Colors.grey,
+              ),
+              Expanded(
+                  child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return SizedBox(
+                      height: 50,
+                      child: FlatButton(
+                        child: Row(
+                          children: [
+                            Icon(configs[index]["label"]),
+                            SizedBox(width: 30),
+                            Text(configs[index]["text"])
+                          ],
+                        ),
+                        onPressed: () {},
+                      ));
+                },
+                itemCount: configs.length,
+              ))
             ],
           ),
         ),
