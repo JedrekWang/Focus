@@ -2,6 +2,13 @@
 
 A RSS reader built by flutter.
 
+目标： 实现一个基于RSS协议的可订阅内容的阅读器
+
+第一版：
+1. 基础的UI样式
+2. 可订阅指定的RSS资源
+3. 前端解析+渲染资源，只支持图片+文字
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

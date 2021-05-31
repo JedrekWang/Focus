@@ -1,11 +1,10 @@
-// import 'package:Focus/parser/rss_parser.dart';
 import 'dart:convert';
 import 'package:Focus/widget/drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-// import 'package:xml/xml.dart';
-// import 'package:flutter/services.dart' show rootBundle;
+import 'constant.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -15,42 +14,41 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Focus',
+      title: appName,
       theme: ThemeData(primaryColor: Colors.white),
-      home: HomePage(title: "Focus on"),
+      home: HomePage(title: homePageTitle),
     );
   }
 }
 
+/// 应用首页UI
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return HomePageState();
   }
 }
 
+/// 首页状态管理
 class HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  TabController _tabController; //需要定义一个Controller
-  List tabs = ["关注", "推荐", "热榜"];
+  TabController _tabController; //tab状态管理对象
+  List tabs = homePageTabs;
 
   @override
   void initState() {
     super.initState();
-    // 创建Controller
     _tabController = TabController(length: tabs.length, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text("Focus on"),
+        title: Text(appName),
         actions: <Widget>[Icon(Icons.search)],
         bottom: TabBar(
             controller: _tabController,
@@ -62,7 +60,6 @@ class HomePageState extends State<HomePage>
         children: [
           Column(
             children: [
-              // Image.asset('assets/Tunnel.jpg'),
               FutureBuilder(
                   future: DefaultAssetBundle.of(context)
                       .loadString("assets/package.json"),
@@ -82,41 +79,11 @@ class HomePageState extends State<HomePage>
           ),
           Container(
               alignment: Alignment.center,
-              // child: Text(tabs[1], textScaleFactor: 5)),
-              child: Column(
-                children: [
-                  Flex(
-                    direction: Axis.horizontal,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          color: Colors.yellowAccent,
-                          padding: EdgeInsets.all(30),
-                          child: Text("hello"),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Container(
-                          color: Colors.redAccent,
-                          padding: EdgeInsets.all(30),
-                          child: Text("hello", textAlign: TextAlign.right,),
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              )),
+              child: Text(tabs[1], textScaleFactor: 5)),
           Container(
               alignment: Alignment.center,
               child: Text(tabs[2], textScaleFactor: 5)),
         ],
-        // tabs.map((e) { //创建3个Tab页
-        //   return Container(
-        //     alignment: Alignment.center,
-        //     child: Text(e, textScaleFactor: 5),
-        //   );
-        // }).toList(),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
