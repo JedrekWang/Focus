@@ -21,6 +21,10 @@ class ItemDetail extends StatelessWidget {
             Html(
               data: item.desc,
               style: {
+                "a": Style(
+                  color: Colors.blueAccent,
+                  textDecoration: TextDecoration.none
+                ),
                 "p": Style(
                     fontSize: FontSize.larger,
                     padding: EdgeInsets.only(top: 15, bottom: 15),
