@@ -1,4 +1,6 @@
-import 'dart:convert';
+import 'package:Focus/models.dart';
+import 'package:Focus/parser.dart';
+import 'package:Focus/widget/channelPage.dart';
 import 'package:Focus/widget/drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,15 +63,14 @@ class HomePageState extends State<HomePage>
           Column(
             children: [
               FutureBuilder(
-                  future: DefaultAssetBundle.of(context)
-                      .loadString("assets/package.json"),
+                  future: RssParser(rssUrl).parseRss(),
                   builder: (builder, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasError) {
                         return Text("Error: ${snapshot.error}");
                       } else {
-                        var content = json.decode(snapshot.data);
-                        return ItemList(content: content);
+                        List<RssChannel> content = snapshot.data;
+                        return ItemList(content: content[0]);
                       }
                     } else {
                       return CircularProgressIndicator();
@@ -117,62 +118,5 @@ class HomePageState extends State<HomePage>
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
-  }
-}
-
-class ItemList extends StatelessWidget {
-  const ItemList({
-    Key key,
-    @required this.content,
-  }) : super(key: key);
-
-  final content;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: ListView.builder(
-      itemBuilder: (context, index) {
-        return SizedBox(
-          height: 100,
-          child: DisplayItem(item: content[index]),
-        );
-      },
-      itemCount: content.length,
-    ));
-  }
-}
-
-class DisplayItem extends StatelessWidget {
-  const DisplayItem({
-    Key key,
-    @required this.item,
-  }) : super(key: key);
-
-  final item;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-        color: Colors.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-                child: Text(
-                  "${item["name"]}",
-                  textAlign: TextAlign.left,
-                  textScaleFactor: 1.2,
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-                flex: 3),
-            Expanded(
-              child: Text("${item["degree"]}万热度",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(color: Colors.grey)),
-              flex: 1,
-            )
-          ],
-        ));
   }
 }

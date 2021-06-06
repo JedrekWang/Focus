@@ -35,7 +35,7 @@ class RssParser {
     return channel;
   }
 
-  parseRss() async {
+  Future<List<RssChannel>> parseRss() async {
     var httpClient = HttpClient();
     // ignore: close_sinks
     var request = await httpClient.getUrl(Uri.parse(rssUrl));
