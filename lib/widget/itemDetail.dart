@@ -20,6 +20,15 @@ class ItemDetail extends StatelessWidget {
           children: <Widget>[
             Html(
               data: item.desc,
+              style: {
+                "p": Style(
+                    fontSize: FontSize.larger,
+                    padding: EdgeInsets.only(top: 15, bottom: 15),
+                    margin: EdgeInsets.only(left: 10, right: 10),
+                    lineHeight: LineHeight.number(1.2),
+                ),
+
+              },
             ),
           ],
         ),
