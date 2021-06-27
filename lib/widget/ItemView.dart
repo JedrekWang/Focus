@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import '../constant.dart';
 import '../models.dart';
@@ -20,29 +21,42 @@ class ItemView extends StatefulWidget {
 
 class ItemViewState extends State<ItemView> {
   final AsyncMemoizer memoizer = AsyncMemoizer();
+  EasyRefreshController _controller;
+  RssChannel content;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = EasyRefreshController();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         FutureBuilder(
-            future: memoizer.runOnce(() => RssParser(rssUrl).parseRss()),
+            future: fetchItemList(),
             builder: (builder, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
                   return Text("Error: ${snapshot.error}");
                 } else {
-                  List<RssChannel> rssChannelList = snapshot.data;
-                  RssChannel content = rssChannelList[0];
+                  content = snapshot.data[0];
                   return Expanded(
-                      child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      return SizedBox(
-                        height: 100,
-                        child: DisplayItem(item: content.rssItemList[index]),
-                      );
+                      child: EasyRefresh(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return SizedBox(
+                          height: 100,
+                          child: DisplayItem(item: content.rssItemList[index]),
+                        );
+                      },
+                      itemCount: content.rssItemList.length,
+                    ),
+                    onRefresh: () async {
+                      RssParser(rssUrl).parseRss();
+                      _controller.resetLoadState();
                     },
-                    itemCount: content.rssItemList.length,
                   ));
                 }
               } else {
@@ -51,5 +65,14 @@ class ItemViewState extends State<ItemView> {
             }),
       ],
     );
+  }
+
+  Future<dynamic> fetchItemList() =>
+      memoizer.runOnce(() => RssParser(rssUrl).parseRss());
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
