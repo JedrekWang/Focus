@@ -4,6 +4,7 @@ import 'package:Focus/widget/channelPage.dart';
 import 'package:Focus/widget/drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:async/async.dart';
 
 import 'constant.dart';
 
@@ -40,6 +41,8 @@ class HomePageState extends State<HomePage>
   TabController _tabController; //tab状态管理对象
   List tabs = homePageTabs;
 
+  final AsyncMemoizer memoizer = AsyncMemoizer();
+
   @override
   void initState() {
     super.initState();
@@ -63,7 +66,7 @@ class HomePageState extends State<HomePage>
           Column(
             children: [
               FutureBuilder(
-                  future: RssParser(rssUrl).parseRss(),
+                  future: memoizer.runOnce(() => RssParser(rssUrl).parseRss()),
                   builder: (builder, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasError) {

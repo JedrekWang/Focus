@@ -15,13 +15,13 @@ class ItemList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
         child: ListView.builder(
-          itemBuilder: (context, index) {
-            return SizedBox(
-              height: 100,
-              child: DisplayItem(item: content.rssItemList[index]),
-            );
-          },
-          itemCount: content.rssItemList.length,
-        ));
+      itemBuilder: (context, index) {
+        return SizedBox(
+          height: 100,
+          child: DisplayItem(item: content.rssItemList[index]),
+        );
+      },
+      itemCount: content.rssItemList.length,
+    ));
   }
 }
