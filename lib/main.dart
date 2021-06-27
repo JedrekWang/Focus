@@ -1,6 +1,4 @@
-import 'package:Focus/models.dart';
-import 'package:Focus/parser.dart';
-import 'package:Focus/widget/channelPage.dart';
+import 'package:Focus/widget/ItemView.dart';
 import 'package:Focus/widget/drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -63,24 +61,7 @@ class HomePageState extends State<HomePage>
       body: TabBarView(
         controller: _tabController,
         children: [
-          Column(
-            children: [
-              FutureBuilder(
-                  future: memoizer.runOnce(() => RssParser(rssUrl).parseRss()),
-                  builder: (builder, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.hasError) {
-                        return Text("Error: ${snapshot.error}");
-                      } else {
-                        List<RssChannel> content = snapshot.data;
-                        return ItemList(content: content[0]);
-                      }
-                    } else {
-                      return CircularProgressIndicator();
-                    }
-                  }),
-            ],
-          ),
+          ItemView(),
           Container(
               alignment: Alignment.center,
               child: Text(tabs[1], textScaleFactor: 5)),
